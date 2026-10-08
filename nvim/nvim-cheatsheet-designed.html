@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1200">
+<title>Neovim Cheatsheet &mdash; Nord</title>
+<style>
+/* ============================================================
+   DESIGN SYSTEM: DarkNord reference sheet
+   Tokens only. No external requests. System fonts.
+   ============================================================ */
+:root {
+  /* ---- Color palette (Nord) ---- */
+  --nord0:        #3b4252;  /* polar night - sheet background   */
+  --nord1:        #434c5c;  /* polar night - panel              */
+  --nord2:        #4c566a;  /* polar night - raised / borders   */
+  --nord3:        #5d6a84;  /* polar night - hairlines          */
+  --nord4:        #d8dee9;  /* snow storm - secondary text      */
+  --nord5:        #e5e9f0;  /* snow storm - body text           */
+  --nord6:        #eceff4;  /* snow storm - headings            */
+  --frost1:       #8fbcbb;
+  --frost2:       #88c0d0;  /* primary accent                   */
+  --frost3:       #81a1c1;
+  --frost4:       #5e81ac;
+  --aurora-red:   #bf616a;
+  --aurora-orange:#d08770;
+  --aurora-yellow:#ebcb8b;
+  --aurora-green: #a3be8c;
+  --aurora-purple:#b48ead;
+
+  /* derived tokens */
+  --ink-muted:    #aab6ca;
+  --ink-faint:    #8d9ab1;
+  --tag-ink:      #c7d0df;
+  --key-face:     #4c566a;
+  --key-face-2:   #434c5c;
+  --key-edge:     #5c6a82;
+  --screen-bg:    #2e3440;
+
+  /* semantic (section accents) */
+  --accent:       var(--frost2);
+  --accent-soft:  rgba(136, 192, 208, .12);
+
+  /* ---- Type scale (print points) ---- */
+  --fs-title:  13pt;
+  --fs-kicker: 5.8pt;
+  --fs-h2:     7.3pt;
+  --fs-h3:     6.2pt;
+  --fs-body:   7pt;
+  --fs-key:    6.5pt;
+  --fs-mode:   5.4pt;
+  --fs-micro:  5.6pt;
+
+  --font-sans: system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "Cascadia Mono", "JetBrains Mono", Consolas, "DejaVu Sans Mono", monospace;
+
+  /* ---- Spacing scale (4px base) ---- */
+  --s1: 2px; --s2: 4px; --s3: 8px; --s4: 12px; --s5: 16px; --s6: 24px;
+
+  /* ---- Radii / borders ---- */
+  --r-sm: 2px; --r-md: 4px; --r-lg: 7px;
+  --bd: 1px solid var(--nord2);
+  --bd-soft: 1px solid var(--nord3);
+}
+
+* { box-sizing: border-box; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+html, body { margin: 0; padding: 0; }
+
+body {
+  background: var(--screen-bg);
+  color: var(--nord5);
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  line-height: 1.15;
+}
+
+/* ============================ page ============================ */
+.sheet {
+  width: 285mm;
+  min-height: 198mm;
+  margin: 0 auto;
+  background:
+    radial-gradient(120mm 60mm at 100% 0%, rgba(94, 129, 172, .10), transparent 70%),
+    radial-gradient(100mm 55mm at 0% 100%, rgba(136, 192, 208, .07), transparent 70%),
+    var(--nord0);
+}
+@media screen {
+  body { padding: 14px 0; }
+  .sheet { border-radius: var(--r-lg); box-shadow: 0 18px 50px rgba(0, 0, 0, .55); padding: 0; }
+}
+
+/* ========================== masthead ========================== */
+.masthead {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--s5);
+  padding: 1.8mm 1mm 1.3mm;
+  border-bottom: 2.5px solid transparent;
+  border-image: linear-gradient(90deg, var(--frost2), var(--frost4) 35%, var(--aurora-purple) 70%, var(--aurora-red)) 1;
+}
+.brand { display: flex; align-items: baseline; gap: 10px; }
+.brand h1 {
+  margin: 0;
+  font-size: var(--fs-title);
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--nord6);
+}
+.brand h1 .thin { font-weight: 300; color: var(--frost2); }
+.brand .kicker {
+  font-size: var(--fs-kicker);
+  letter-spacing: .34em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+.mast-right { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; }
+.mast-row { display: flex; align-items: center; gap: 6px; }
+.leader-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 2px 8px 2px 4px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  border: 1px solid var(--frost4);
+  font-size: var(--fs-micro);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--nord6);
+  white-space: nowrap;
+}
+.mast-meta {
+  font-size: var(--fs-micro);
+  color: var(--ink-muted);
+  letter-spacing: .05em;
+  white-space: nowrap;
+}
+.mast-meta code { color: var(--frost1); font-family: var(--font-mono); font-size: var(--fs-micro); }
+.legend { display: flex; gap: 7px; font-size: var(--fs-micro); color: var(--ink-muted); white-space: nowrap; }
+.legend b { color: var(--frost2); font-family: var(--font-mono); font-size: var(--fs-micro); }
+
+/* ====================== column flow =========================== */
+.flow { display: flex; align-items: flex-start; gap: 2.4mm; padding: 1.4mm 0 0; }
+.col { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 1.2mm; }
+
+.card {
+  break-inside: avoid;
+  page-break-inside: avoid;
+  background: linear-gradient(180deg, rgba(67, 76, 92, .38), rgba(59, 66, 82, .30));
+  border: var(--bd-soft);
+  border-left: 2.5px solid var(--accent);
+  border-radius: var(--r-md);
+  padding: .9mm 1.1mm .9mm;
+  margin: 0;
+}
+.card-h {
+  display: flex; align-items: baseline; justify-content: space-between; gap: var(--s2);
+  border-bottom: 1.2px solid var(--accent);
+  padding-bottom: .55mm;
+  margin-bottom: .6mm;
+  break-after: avoid; page-break-after: avoid;
+}
+.card-h h2 {
+  margin: 0;
+  font-size: var(--fs-h2);
+  font-weight: 700;
+  letter-spacing: .17em;
+  text-transform: uppercase;
+  color: var(--nord6);
+}
+.card-h .meta {
+  font-size: var(--fs-micro);
+  color: var(--ink-muted);
+  letter-spacing: .04em;
+  white-space: nowrap;
+}
+.note {
+  font-size: var(--fs-micro);
+  color: var(--ink-muted);
+  font-style: italic;
+  margin: 0 0 .5mm;
+}
+.note code { font-style: normal; }
+
+.sub-h {
+  margin: .7mm 0 .3mm;
+  font-size: var(--fs-h3);
+  font-weight: 700;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--nord5);
+  display: flex; align-items: center; gap: 5px;
+  break-after: avoid; page-break-after: avoid;
+}
+.sub-h::before {
+  content: ""; width: 6px; height: 2px; border-radius: 1px;
+  background: var(--accent); opacity: .85; flex: none;
+}
+
+/* ========================= key rows =========================== */
+.row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s2);
+  padding: .2mm 0;
+  border-bottom: 0.5px dotted rgba(154, 167, 189, .38);
+  break-inside: avoid; page-break-inside: avoid;
+}
+.row:last-child { border-bottom: none; }
+.keys {
+  flex: 0 0 34%;
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px;
+}
+.desc { flex: 1 1 auto; color: var(--nord4); }
+.desc strong { color: var(--nord6); font-weight: 600; }
+
+/* mode tags */
+.m {
+  font-style: normal;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mode);
+  letter-spacing: .08em;
+  color: var(--tag-ink);
+  border: 1px solid rgba(199, 208, 223, .5);
+  border-radius: var(--r-sm);
+  padding: 0 2px;
+  margin-left: 1px;
+  white-space: nowrap;
+}
+
+/* key chips */
+kbd {
+  font-family: var(--font-mono);
+  font-size: var(--fs-key);
+  line-height: 1.35;
+  color: var(--nord6);
+  background: linear-gradient(180deg, var(--key-face), var(--key-face-2));
+  border: 1px solid var(--key-edge);
+  border-bottom-width: 2px;
+  border-radius: var(--r-sm);
+  padding: 0 2px;
+  white-space: nowrap;
+}
+kbd.ld { background: linear-gradient(180deg, rgba(94, 129, 172, .55), rgba(94, 129, 172, .32)); border-color: var(--frost4); color: var(--nord6); }
+kbd.cm { background: linear-gradient(180deg, rgba(172, 142, 173, .32), rgba(172, 142, 173, .16)); border-color: rgba(180, 142, 173, .55); }
+.slash { color: var(--ink-muted); font-family: var(--font-mono); font-size: var(--fs-key); }
+
+code {
+  font-family: var(--font-mono);
+  font-size: var(--fs-key);
+  color: var(--frost1);
+  background: rgba(143, 188, 187, .10);
+  border-radius: var(--r-sm);
+  padding: 0 2px;
+}
+.plain { font-style: italic; color: var(--aurora-yellow); font-family: var(--font-sans); font-size: var(--fs-body); }
+.sub-h .sub-note { letter-spacing: .02em; text-transform: none; color: var(--ink-faint); font-weight: 400; }
+
+/* section accent colors */
+.acc-frost   { --accent: var(--frost2);   --accent-soft: rgba(136, 192, 208, .12); }
+.acc-mint    { --accent: var(--frost1);   --accent-soft: rgba(143, 188, 187, .12); }
+.acc-green   { --accent: var(--aurora-green); --accent-soft: rgba(163, 190, 140, .12); }
+.acc-purple  { --accent: var(--aurora-purple); --accent-soft: rgba(180, 142, 173, .12); }
+.acc-yellow  { --accent: var(--aurora-yellow); --accent-soft: rgba(235, 203, 139, .12); }
+.acc-orange  { --accent: var(--aurora-orange); --accent-soft: rgba(208, 135, 112, .12); }
+.acc-red     { --accent: var(--aurora-red); --accent-soft: rgba(191, 97, 106, .12); }
+
+/* ============================ print =========================== */
+@page { size: A4 landscape; margin: 6mm; }
+@media print {
+  body { background: var(--nord0); }
+  .sheet { width: 285mm; min-height: 198mm; margin: 0; padding: 0; border-radius: 0; box-shadow: none; }
+}
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <header class="masthead">
+    <div class="brand">
+      <h1>Neo<span class="thin">vim</span></h1>
+      <div>
+        <div class="kicker">Cheatsheet &middot; Reference Poster</div>
+      </div>
+    </div>
+    <div class="mast-right">
+      <div class="mast-row">
+        <span class="leader-badge"><kbd class="ld">Space</kbd> Leader key</span>
+        <span class="mast-meta"><code>~/.config/nvim/</code> &middot; full docs in <code>README.md</code></span>
+      </div>
+      <div class="legend">
+        <span><b>N</b> normal</span><span><b>I</b> insert</span><span><b>V</b> visual</span><span><b>O</b> operator</span><span><b>C</b> cmdline</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="flow">
+
+    <div class="col">
+    <section class="card acc-mint">
+          <div class="card-h"><h2>Moving around</h2><span class="meta">core Vim motions</span></div>
+          <div class="row"><span class="keys"><kbd>h</kbd><span class="slash">/</span><kbd>j</kbd><span class="slash">/</span><kbd>k</kbd><span class="slash">/</span><kbd>l</kbd></span><span class="desc">Left / down / up / right</span></div>
+          <div class="row"><span class="keys"><kbd>w</kbd><span class="slash">/</span><kbd>b</kbd><span class="slash">/</span><kbd>e</kbd></span><span class="desc">Next word / back a word / end of word</span></div>
+          <div class="row"><span class="keys"><kbd>0</kbd><span class="slash">/</span><kbd>^</kbd><span class="slash">/</span><kbd>$</kbd></span><span class="desc">Line start / first non-blank / line end</span></div>
+          <div class="row"><span class="keys"><kbd>gg</kbd><span class="slash">/</span><kbd>G</kbd></span><span class="desc">First / last line (or <code>{n}G</code> for line n)</span></div>
+          <div class="row"><span class="keys"><kbd>{</kbd><span class="slash">/</span><kbd>}</kbd></span><span class="desc">Previous / next blank-line-delimited block</span></div>
+          <div class="row"><span class="keys"><kbd>%</kbd></span><span class="desc">Jump to matching bracket</span></div>
+          <div class="row"><span class="keys"><kbd>f{ch}</kbd><span class="slash">/</span><kbd>t{ch}</kbd></span><span class="desc">Jump to / just before next <code>ch</code> on line (<code>F</code>/<code>T</code> backwards)</span></div>
+          <div class="row"><span class="keys"><kbd>;</kbd><span class="slash">/</span><kbd>,</kbd></span><span class="desc">Repeat last <code>f</code>/<code>t</code> forward / backward</span></div>
+          <div class="row"><span class="keys"><kbd>*</kbd><span class="slash">/</span><kbd>#</kbd></span><span class="desc">Next / previous occurrence of word under cursor</span></div>
+          <div class="row"><span class="keys"><kbd>n</kbd><span class="slash">/</span><kbd>N</kbd></span><span class="desc">Next / previous search match (same direction)</span></div>
+          <div class="row"><span class="keys"><kbd>H</kbd><span class="slash">/</span><kbd>M</kbd><span class="slash">/</span><kbd>L</kbd></span><span class="desc">Top / middle / bottom of screen</span></div>
+          <div class="row"><span class="keys"><kbd>zz</kbd><span class="slash">/</span><kbd>zt</kbd><span class="slash">/</span><kbd>zb</kbd></span><span class="desc">Center / top / bottom current line on screen</span></div>
+          <div class="row"><span class="keys"><kbd>''</kbd><span class="slash">/</span><kbd>``</kbd></span><span class="desc">Back to line / exact position before last jump</span></div>
+          <div class="row"><span class="keys"><kbd>gi</kbd></span><span class="desc">Insert at last insert position</span></div>
+        </section>
+
+    <section class="card acc-frost">
+          <div class="card-h"><h2>Shortcuts &middot; Editing &amp; Git</h2><span class="meta">flash &middot; surround &middot; gitsigns</span></div>
+    
+          <div class="row"><span class="keys"><kbd>?</kbd><i class="m">N&middot;V&middot;O</i></span><span class="desc">Flash Treesitter jump</span></div>
+          <div class="row"><span class="keys"><kbd>r</kbd><i class="m">O</i></span><span class="desc">Remote Flash action</span></div>
+          <div class="row"><span class="keys"><kbd>R</kbd><i class="m">O&middot;V</i></span><span class="desc">Flash Treesitter search</span></div>
+          <div class="row"><span class="keys"><kbd>s-family</kbd><i class="m">N&middot;V&middot;O</i></span><span class="desc">nvim-surround: add / change / delete (defaults)</span></div>
+          <div class="row"><span class="keys"><kbd>gcc</kbd><span class="slash">/</span><kbd>gc</kbd><i class="m">N(+V)</i></span><span class="desc">Comment line / motion or selection</span></div>
+          <div class="row"><span class="keys"><kbd>gb</kbd><i class="m">N&middot;V</i></span><span class="desc">Block comment</span></div>
+          <div class="row"><span class="keys"><kbd>]c</kbd><span class="slash">/</span><kbd>[c</kbd><i class="m">N</i></span><span class="desc">Next / previous git hunk (gitsigns)</span></div>
+          <div class="row"><span class="keys"><kbd class="ld">leader</kbd><kbd>hs</kbd><i class="m">N&middot;V</i></span><span class="desc">Stage hunk (or visual selection)</span></div>
+          <div class="row"><span class="keys"><kbd class="ld">leader</kbd><kbd>hr</kbd><i class="m">N&middot;V</i></span><span class="desc">Reset hunk (or visual selection)</span></div>
+          <div class="row"><span class="keys"><kbd class="ld">leader</kbd><kbd>hu</kbd><i class="m">N</i></span><span class="desc">Undo stage hunk</span></div>
+          <div class="row"><span class="keys"><kbd class="ld">leader</kbd><kbd>hp</kbd><i class="m">N</i></span><span class="desc">Preview hunk</span></div>
+          <div class="row"><span class="keys"><kbd class="ld">leader</kbd><kbd>hb</kbd><i class="m">N</i></span><span class="desc">Blame current line (full)</span></div>
+          <div class="row"><span class="keys"><span class="plain">extra text objects</span><i class="m">V&middot;O</i></span><span class="desc">various-textobjs defaults (subword, value, indent&hellip;)</span></div>
+        </section>
+    </div>
+
+    <div class="col">
+    <section class="card acc-frost">
+          <div class="card-h"><h2>Shortcuts &middot; Files &amp; Windows</h2><span class="meta">general</span></div>
+    
+          <div class="row"><span class="keys"><kbd class="ld">leader</kbd><kbd>pl</kbd><i class="m">N</i></span><span class="desc">Open Lazy plugin manager</span></div>
+          <div class="row"><span class="keys"><kbd class="ld">leader</kbd><kbd>sv</kbd><i class="m">N</i></span><span class="desc">Re-source <code>$MYVIMRC</code></span></div>
+          <div class="row"><span class="keys"><kbd class="ld">leader</kbd><kbd>cv</kbd><i class="m">N</i></span><span class="desc">Edit <code>$MYVIMRC</code> in vertical split</span></div>
+          <div class="row"><span class="keys"><kbd class="ld">leader</kbd><kbd>e</kbd><i class="m">N</i></span><span class="desc">Toggle Neo-tree (reveal current file)</span></div>
+          <div class="row"><span class="keys"><kbd class="ld">leader</kbd><kbd>E</kbd><i class="m">N</i></span><span class="desc">Reveal file in Neo-tree, focus the tree</span></div>
+          <div class="row"><span class="keys"><kbd class="ld">leader</kbd><kbd>gb</kbd><i class="m">N</i></span><span class="desc">Open buffers as a Neo-tree source</span></div>
+          <div class="row"><span class="keys"><kbd class="ld">leader</kbd><kbd>gs</kbd><i class="m">N</i></span><span class="desc">Open git status as a Neo-tree source</span></div>
+          <div class="row"><span class="keys"><kbd class="ld">leader</kbd><kbd>ff</kbd><i class="m">N</i></span><span class="desc">Telescope: find &amp; open file (auto-reveals)</span></div>
+          <div class="row"><span class="keys"><kbd class="ld">leader</kbd><kbd>fg</kbd><i class="m">N</i></span><span class="desc">Telescope: live grep file contents</span></div>
+          <div class="row"><span class="keys"><kbd class="ld">leader</kbd><kbd>xo</kbd><i class="m">N</i></span><span class="desc">Open with system default app (PDF, HTML&hellip;)</span></div>
+          <div class="row"><span class="keys"><kbd class="ld">leader</kbd><kbd>?</kbd><i class="m">N</i></span><span class="desc">Show buffer-local keymaps (which-key)</span></div>
+          <div class="row"><span class="keys"><kbd>jk</kbd><span class="slash">/</span><kbd>jh</kbd><i class="m">I</i></span><span class="desc">Escape to Normal (cursor steps right)</span></div>
+          <div class="row"><span class="keys"><kbd>C-s</kbd><i class="m">N&middot;I</i></span><span class="desc">Save file</span></div>
+          <div class="row"><span class="keys"><kbd>C-s</kbd><i class="m">C</i></span><span class="desc">Toggle Flash mid-input (flaky; prefer <kbd class="ld">leader</kbd><kbd>tf</kbd>)</span></div>
+          <div class="row"><span class="keys"><kbd class="ld">leader</kbd><kbd>tf</kbd><i class="m">N</i></span><span class="desc">Toggle Flash search (reliable; use before <code>/</code>)</span></div>
+          <div class="row"><span class="keys"><kbd>C-q</kbd><i class="m">N&middot;I</i></span><span class="desc">Quit window</span></div>
+          <div class="row"><span class="keys"><kbd>PgUp</kbd><span class="slash">/</span><kbd>PgDn</kbd><i class="m">N&middot;V</i></span><span class="desc">Scroll half a window (not full page)</span></div>
+          <div class="row"><span class="keys"><kbd class="cm">:qa</kbd><i class="m">C</i></span><span class="desc">Quit all windows</span></div>
+          <div class="row"><span class="keys"><kbd class="cm">:wqa</kbd><span class="slash">/</span><kbd class="cm">:xa</kbd><i class="m">C</i></span><span class="desc">Save all windows and quit</span></div>
+          <div class="row"><span class="keys"><kbd class="cm">:qa!</kbd><i class="m">C</i></span><span class="desc">Quit all windows without saving</span></div>
+        </section>
+
+    <section class="card acc-yellow">
+          <div class="card-h"><h2>Completion</h2><span class="meta">blink.cmp &middot; default preset</span></div>
+          <div class="row"><span class="keys"><kbd>C-space</kbd><i class="m">I</i></span><span class="desc">Show completion menu / docs</span></div>
+          <div class="row"><span class="keys"><kbd>C-n</kbd><span class="slash">/</span><kbd>C-p</kbd><i class="m">I</i></span><span class="desc">Next / previous item (or Up / Down)</span></div>
+          <div class="row"><span class="keys"><kbd>C-y</kbd><i class="m">I</i></span><span class="desc">Accept selected item</span></div>
+          <div class="row"><span class="keys"><kbd>C-e</kbd><i class="m">I</i></span><span class="desc">Dismiss menu</span></div>
+          <div class="row"><span class="keys"><kbd>C-b</kbd><span class="slash">/</span><kbd>C-f</kbd><i class="m">I</i></span><span class="desc">Scroll docs pane</span></div>
+          <div class="row"><span class="keys"><kbd>Tab</kbd><span class="slash">/</span><kbd>S-Tab</kbd><i class="m">I</i></span><span class="desc">Next / prev snippet placeholder</span></div>
+          <div class="row"><span class="keys"><kbd>C-k</kbd><i class="m">I</i></span><span class="desc">Toggle signature help</span></div>
+        </section>
+    </div>
+
+    <div class="col">
+    <section class="card acc-green">
+          <div class="card-h"><h2>Neo-tree</h2><span class="meta">file explorer</span></div>
+          <p class="note">Open with <kbd class="ld">leader</kbd><kbd>e</kbd> (toggles, reveals current file); <kbd class="ld">leader</kbd><kbd>E</kbd> reveals and focuses. Defaults plus a custom <kbd>Z</kbd>. Cursor on a tree node:</p>
+    
+          <h3 class="sub-h">Window navigation</h3>
+          <div class="row"><span class="keys"><kbd>C-w</kbd><kbd>l</kbd></span><span class="desc">To window on the right (tree &rarr; editor)</span></div>
+          <div class="row"><span class="keys"><kbd>C-w</kbd><kbd>h</kbd></span><span class="desc">To window on the left (editor &rarr; tree)</span></div>
+          <div class="row"><span class="keys"><kbd>C-w</kbd><kbd>w</kbd></span><span class="desc">Cycle to next window</span></div>
+          <div class="row"><span class="keys"><kbd>C-w</kbd><kbd>p</kbd></span><span class="desc">Back to previous window</span></div>
+    
+          <h3 class="sub-h">Expand / collapse</h3>
+          <div class="row"><span class="keys"><kbd>Space</kbd></span><span class="desc">Toggle node under cursor (expand/collapse dir)</span></div>
+          <div class="row"><span class="keys"><kbd>CR</kbd></span><span class="desc">Open file, or expand directory</span></div>
+          <div class="row"><span class="keys"><kbd>C</kbd></span><span class="desc">Close node under cursor</span></div>
+          <div class="row"><span class="keys"><kbd>z</kbd></span><span class="desc">Close all nodes</span></div>
+          <div class="row"><span class="keys"><kbd>Z</kbd></span><span class="desc">Expand all nodes (our opts; upstream keeps it off)</span></div>
+          <div class="row"><span class="keys"><kbd>BS</kbd></span><span class="desc">Navigate up to parent directory</span></div>
+          <div class="row"><span class="keys"><kbd>.</kbd></span><span class="desc">Set current node as tree root</span></div>
+    
+          <h3 class="sub-h">Find / filter</h3>
+          <div class="row"><span class="keys"><kbd>/</kbd></span><span class="desc">Fuzzy filter as you type (<kbd>Esc</kbd> closes, <kbd>C-x</kbd> clears)</span></div>
+          <div class="row"><span class="keys"><kbd>D</kbd></span><span class="desc">Fuzzy find rooted at dir under cursor</span></div>
+          <div class="row"><span class="keys"><kbd>#</kbd></span><span class="desc">Fuzzy sort results (fzy algorithm)</span></div>
+          <div class="row"><span class="keys"><kbd>f</kbd></span><span class="desc">Filter on submit (keep only matches)</span></div>
+          <div class="row"><span class="keys"><kbd>C-x</kbd></span><span class="desc">Clear active filter</span></div>
+          <div class="row"><span class="keys"><kbd>H</kbd></span><span class="desc">Toggle hidden files (dotfiles)</span></div>
+          <div class="row"><span class="keys"><kbd>?</kbd></span><span class="desc">Show all tree keymaps (help popup)</span></div>
+    
+          <h3 class="sub-h">Refresh</h3>
+          <div class="row"><span class="keys"><kbd>R</kbd></span><span class="desc">Refresh tree after external changes (git checkout, other apps); in-Nvim saves auto-refresh</span></div>
+        </section>
+
+    <section class="card acc-orange">
+          <div class="card-h"><h2>LSP</h2><span class="meta">built-in defaults</span></div>
+          <p class="note">Active when a language server is attached.</p>
+          <div class="row"><span class="keys"><kbd>K</kbd><i class="m">N</i></span><span class="desc">Hover documentation</span></div>
+          <div class="row"><span class="keys"><kbd>grn</kbd><i class="m">N</i></span><span class="desc">Rename symbol</span></div>
+          <div class="row"><span class="keys"><kbd>gra</kbd><i class="m">N&middot;V</i></span><span class="desc">Code action</span></div>
+          <div class="row"><span class="keys"><kbd>grr</kbd><i class="m">N</i></span><span class="desc">Go to references</span></div>
+          <div class="row"><span class="keys"><kbd>gri</kbd><i class="m">N</i></span><span class="desc">Go to implementation</span></div>
+          <div class="row"><span class="keys"><kbd>gO</kbd><i class="m">N</i></span><span class="desc">Document symbols</span></div>
+          <div class="row"><span class="keys"><kbd>[d</kbd><span class="slash">/</span><kbd>]d</kbd><i class="m">N</i></span><span class="desc">Previous / next diagnostic</span></div>
+          <div class="row"><span class="keys"><kbd class="cm">:Mason</kbd><i class="m">C</i></span><span class="desc">Manage installed language servers</span></div>
+        </section>
+    </div>
+
+    <div class="col">
+    <section class="card acc-purple">
+          <div class="card-h"><h2>Plugin examples</h2><span class="meta">flash &middot; surround &middot; text objects</span></div>
+    
+          <h3 class="sub-h">Flash</h3>
+          <div class="row"><span class="keys"><kbd>/foo</kbd></span><span class="desc">Label every match; press one to jump</span></div>
+          <div class="row"><span class="keys"><kbd>f(</kbd><span class="slash">/</span><kbd>t;</kbd></span><span class="desc">Char motions label shared-line matches</span></div>
+          <div class="row"><span class="keys"><kbd>?</kbd></span><span class="desc">Label Treesitter nodes; press to jump</span></div>
+          <div class="row"><span class="keys"><kbd>d?</kbd><span class="slash">/</span><kbd>y?</kbd></span><span class="desc">Delete / yank node via its label</span></div>
+          <div class="row"><span class="keys"><kbd>v</kbd><span class="slash">then</span><kbd>R</kbd></span><span class="desc">Treesitter search on selection</span></div>
+          <div class="row"><span class="keys"><kbd>/</kbd><span class="slash">then</span><kbd>C-s</kbd></span><span class="desc">Toggle Flash mid-search (flaky; prefer <kbd class="ld">leader</kbd><kbd>tf</kbd>)</span></div>
+          <div class="row"><span class="keys"><kbd>yr</kbd><span class="slash">+ label</span></span><span class="desc">Yank at a distance (remote action)</span></div>
+    
+          <h3 class="sub-h">Surround</h3>
+          <div class="row"><span class="keys"><kbd>ysiw"</kbd></span><span class="desc"><code>hello</code> &rarr; <code>"hello"</code></span></div>
+          <div class="row"><span class="keys"><kbd>yss)</kbd></span><span class="desc">Wrap whole line in parens</span></div>
+          <div class="row"><span class="keys"><kbd>ds"</kbd></span><span class="desc"><code>"hello"</code> &rarr; <code>hello</code></span></div>
+          <div class="row"><span class="keys"><kbd>cs"'</kbd></span><span class="desc"><code>"hello"</code> &rarr; <code>'hello'</code></span></div>
+          <div class="row"><span class="keys"><kbd>ys2w]</kbd></span><span class="desc">Wrap next 2 words in brackets</span></div>
+          <div class="row"><span class="keys"><kbd>S}</kbd><i class="m">V</i></span><span class="desc">Wrap selection in <code>{ ... }</code></span></div>
+    
+          <h3 class="sub-h">Text objects <span class="sub-note">(work with d / c / y / v)</span></h3>
+          <div class="row"><span class="keys"><kbd>ii</kbd><span class="slash">/</span><kbd>ai</kbd></span><span class="desc">Inner / outer indentation block</span></div>
+          <div class="row"><span class="keys"><kbd>iv</kbd></span><span class="desc">Change value in <code>key = value</code></span></div>
+          <div class="row"><span class="keys"><kbd>ik</kbd></span><span class="desc">Delete key in <code>key = value</code></span></div>
+          <div class="row"><span class="keys"><kbd>in</kbd><span class="slash">/</span><kbd>an</kbd></span><span class="desc">Change / delete a number</span></div>
+          <div class="row"><span class="keys"><kbd>iS</kbd></span><span class="desc">Delete one camelCase/snake_case segment</span></div>
+          <div class="row"><span class="keys"><kbd>i,</kbd></span><span class="desc">Delete the argument under cursor</span></div>
+          <div class="row"><span class="keys"><kbd>gG</kbd></span><span class="desc">Entire buffer (<code>ygG</code> yanks all)</span></div>
+          <div class="row"><span class="keys"><kbd>gw</kbd></span><span class="desc">Window's visible text (<code>ygw</code>)</span></div>
+          <div class="row"><span class="keys"><kbd>aq</kbd></span><span class="desc">Delete any quoted string</span></div>
+          <div class="row"><span class="keys"><kbd>ao</kbd></span><span class="desc">Operate around nearest bracket pair</span></div>
+          <div class="row"><span class="keys"><kbd>iF</kbd></span><span class="desc">Select the file path under cursor</span></div>
+          <div class="row"><span class="keys"><kbd>L</kbd></span><span class="desc">URL under cursor (e.g. <code>yL</code>)</span></div>
+          <div class="row"><span class="keys"><kbd>n</kbd></span><span class="desc">To near end of line (e.g. <code>dn</code>)</span></div>
+        </section>
+
+    <section class="card acc-red">
+          <div class="card-h"><h2>Trouble</h2><span class="meta">diagnostics &amp; lists</span></div>
+          <div class="row"><span class="keys"><kbd class="ld">leader</kbd><kbd>xx</kbd><i class="m">N</i></span><span class="desc">Workspace diagnostics</span></div>
+          <div class="row"><span class="keys"><kbd class="ld">leader</kbd><kbd>xX</kbd><i class="m">N</i></span><span class="desc">Current buffer diagnostics</span></div>
+          <div class="row"><span class="keys"><kbd class="ld">leader</kbd><kbd>cs</kbd><i class="m">N</i></span><span class="desc">Document symbols browser</span></div>
+          <div class="row"><span class="keys"><kbd class="ld">leader</kbd><kbd>xQ</kbd><i class="m">N</i></span><span class="desc">Quickfix list</span></div>
+        </section>
+    </div>
+
+    </div>
+</div>
+</body>
+</html>
